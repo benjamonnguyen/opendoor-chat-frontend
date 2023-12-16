@@ -1,8 +1,44 @@
-#chat_input {
-  padding: 0 0.5em 0 0.5em;
-  margin: 0;
-  position: absolute;
-  bottom: 0;
+html, body, main {
+  height: 100%;
+  position: fixed;
   overflow: hidden;
+}
+
+html>body>main {
+  padding: 0 2.5em;
+}
+
+nav {
+  padding: 0 2.5em;
+  background-color: var(--background-color);
+}
+
+li>h1 {
+  margin-bottom: 2.5em;
+}
+
+#chat {
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+
+  position: fixed;
+  bottom: 0px;
   width: 100%;
+}
+
+#chat_messages {
+  height: 100%;
+  overflow: scroll;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+#chat_form {
+  padding: 1em 5em;
+}
+
+.chat_message {
+  padding-bottom: 0.5em;
 }

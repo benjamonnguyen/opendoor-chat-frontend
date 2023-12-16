@@ -119,16 +119,17 @@ func (c *Client) writePump() {
 
 			//
 			if val, ok := incoming["chat_message"]; ok {
-				if err := templates.ChatMessageTemplate.Execute(w, string(val)); err != nil {
+				msg := string(val)
+				msg = msg[1 : len(msg)-1] // remove quotes
+				if err := templates.ChatMessageTemplate.Execute(w, msg); err != nil {
 					log.Println("failed executing ChatMessageTemplate:", err)
 				}
 			}
 
-			// generate chat message HTML
-			n := len(c.send)
-			for i := 0; i < n; i++ {
-				templates.ChatMessageTemplate.ExecuteTemplate(w, "msg", string(<-c.send))
-			}
+			// n := len(c.send)
+			// for i := 0; i < n; i++ {
+			// 	templates.ChatMessageTemplate.ExecuteTemplate(w, "msg", string(<-c.send))
+			// }
 
 			if err := w.Close(); err != nil {
 				return

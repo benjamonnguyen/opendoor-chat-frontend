@@ -8,16 +8,37 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
 </head>
 <body>
-    <main>
-        <!-- TODO login page redirect -->
-        <div hx-ext="ws" ws-connect="/ws">
-            <div id="notifications"></div>
+    <!-- TODO login page redirect -->
+
+    <!-- Nav -->
+    <nav>
+        <ul>
+        <li>
+            <h1>Opendoor.chat</h1>
+        </li>
+        </ul>
+    </nav>
+
+    <main hx-ext="ws" ws-connect="/ws">
+        <div id="chat">
             <div id="chat_messages"></div>
-            <form id="chat_input" ws-send>
+            <form id="chat_form" ws-send>
                 <!-- TODO can optimize by not requiring server call to add chat_message element for emitter -->
-                <input name="chat_message" placeholder="Send a message">
+                <input id="chat_input" name="chat_message" placeholder="Send a message">
             </form>
         </div>
     </main>
+
+    <script>
+        const form = document.getElementById('chat_form')
+        form.addEventListener('htmx:wsAfterSend', function (event) {
+                event.target.reset();
+        });
+        form.addEventListener('htmx:wsBeforeSend', function (event) {
+            if (/:\"\",/.test(event.detail.message)) {
+                event.preventDefault();
+            };
+        });
+    </script>
 </body>
 </html>
