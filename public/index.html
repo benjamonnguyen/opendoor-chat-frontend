@@ -1,30 +1,59 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>HTMX Example</title>
-    <link href="/styles.css" rel="stylesheet" />
-    <script src="https://unpkg.com/htmx.org"></script>
-  </head>
-  <body>
-    <div
-      id="header"
-      hx-get="/api/header"
-      hx-trigger="load"
-      class="w-full"
-    ></div>
-    <div class="flex">
-      <div
-        id="sidebar"
-        hx-get="/api/sidebar"
-        hx-trigger="load"
-        class="w-full md:w-1/4"
-      ></div>
-      <div
-        id="dashboard"
-        hx-get="/api/dashboard"
-        hx-trigger="load"
-        class="w-full md:w-3/4"
-      ></div>
+<html lang="en">
+<head>
+    <title>Chat Example</title>
+    <script src="https://unpkg.com/htmx.org@1.9.9" integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+</head>
+<body>
+    <!-- TODO login page redirect -->
+    <div hx-ext="ws" ws-connect="/ws">
+        <div id="notifications"></div>
+        <div id="chat_messages">
+        </div>
+        <form id="form" ws-send>
+            <!-- TODO can optimize by not requiring server call to add chat_message element for emitter -->
+            <input name="chat_message">
+        </form>
     </div>
-  </body>
+</body>
+
+
+<!-- <style type="text/css">
+html {
+    overflow: hidden;
+}
+
+body {
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: gray;
+}
+
+#log {
+    background: white;
+    margin: 0;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    position: absolute;
+    top: 0.5em;
+    left: 0.5em;
+    right: 0.5em;
+    bottom: 3em;
+    overflow: auto;
+}
+
+#form {
+    padding: 0 0.5em 0 0.5em;
+    margin: 0;
+    position: absolute;
+    bottom: 1em;
+    left: 0px;
+    width: 100%;
+    overflow: hidden;
+}
+
+</style> -->
 </html>

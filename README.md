@@ -1,3 +1,7 @@
+# TODO
+- Pico over Tailwind?
+
+
 # Fullstack Go HTMX App with Tailwind
 
 This application is a fullstack Go application with HTMX and Tailwind CSS.
@@ -10,7 +14,6 @@ Before you begin, ensure you have installed the following:
 
 - Go
 - Air
-- Browser-sync
 - TailwindCSS
 
 ## Installation
@@ -22,7 +25,7 @@ Follow the steps below to install the necessary tools:
 2. Install Air: Air is a live-reloading command line utility for Go applications in development. Install it using the following command:
 
 ```bash
-curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s
+go install github.com/cosmtrek/air@latest
 ```
 
 3. Install NPM deps:
