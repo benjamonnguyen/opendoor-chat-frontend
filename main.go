@@ -8,6 +8,9 @@ import (
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/julienschmidt/httprouter"
+	"github.com/urfave/negroni"
 )
 
 var (
@@ -34,13 +37,23 @@ func main() {
 	go hub.run()
 
 	//
-	http.HandleFunc("/", serveHome)
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+	router := httprouter.New()
+	router.GET("/", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		http.ServeFile(w, r, "public/index.html")
+	})
+	router.GET("/styles.css", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		http.ServeFile(w, r, "public/styles.css")
+	})
+	router.GET("/ws", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		serveWs(hub, w, r)
 	})
+
+	//
+	n := negroni.Classic()
+	n.UseHandler(router)
 	srv := &http.Server{
-		Addr:              *addr,
-		ReadHeaderTimeout: 3 * time.Second,
+		Addr:    *addr,
+		Handler: n,
 	}
 	defer func() {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -54,17 +67,4 @@ func main() {
 	}()
 
 	<-interruptCh
-}
-
-func serveHome(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.URL)
-	if r.URL.Path != "/" {
-		http.Error(w, "Not found", http.StatusNotFound)
-		return
-	}
-	if r.Method != http.MethodGet {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-	http.ServeFile(w, r, "public/index.html")
 }
