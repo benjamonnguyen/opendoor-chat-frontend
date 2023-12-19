@@ -1,16 +1,12 @@
-// Copyright 2013 The Gorilla WebSocket Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-package main
+package chat
 
 import (
 	"bytes"
 	"encoding/json"
 	"log"
-	"net/http"
 	"time"
 
+	"github.com/benjamonnguyen/opendoor-chat-frontend/devlog"
 	"github.com/benjamonnguyen/opendoor-chat-frontend/templates"
 	"github.com/gorilla/websocket"
 )
@@ -34,11 +30,6 @@ var (
 	space   = []byte{' '}
 )
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-}
-
 // Client is a middleman between the websocket connection and the hub.
 type Client struct {
 	hub *Hub
@@ -48,6 +39,22 @@ type Client struct {
 
 	// Buffered channel of outbound messages.
 	send chan []byte
+}
+
+// NewClient also starts the readPump and writePump.
+func NewClient(hub *Hub, conn *websocket.Conn) *Client {
+	cl := &Client{
+		hub:  hub,
+		conn: conn,
+		send: make(chan []byte, 256),
+	}
+
+	// Allow collection of memory referenced by the caller by doing all work in
+	// new goroutines.
+	go cl.readPump()
+	go cl.writePump()
+
+	return cl
 }
 
 // readPump pumps messages from the websocket connection to the hub.
@@ -78,7 +85,7 @@ func (c *Client) readPump() {
 			break
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-		devLogger.Println("sending message:", string(message))
+		devlog.Println("sending message:", string(message))
 		c.hub.broadcast <- message
 	}
 }
@@ -115,7 +122,7 @@ func (c *Client) writePump() {
 				log.Println("failed to Unmarshall message:", string(message))
 				continue
 			}
-			devLogger.Println("received message")
+			devlog.Println("received message")
 
 			//
 			if val, ok := incoming["chat_message"]; ok {
@@ -141,20 +148,4 @@ func (c *Client) writePump() {
 			}
 		}
 	}
-}
-
-// serveWs handles websocket requests from the peer.
-func serveWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
-	conn, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
-	client.hub.register <- client
-
-	// Allow collection of memory referenced by the caller by doing all work in
-	// new goroutines.
-	go client.writePump()
-	go client.readPump()
 }
