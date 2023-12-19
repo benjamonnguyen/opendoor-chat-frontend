@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -29,11 +30,6 @@ func main() {
 
 	//
 	hub := newHub()
-	defer func() {
-		for cl := range hub.clients {
-			cl.conn.Close()
-		}
-	}()
 	go hub.run()
 
 	//
@@ -42,7 +38,29 @@ func main() {
 		http.ServeFile(w, r, "public/index.html")
 	})
 	router.GET("/styles.css", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		http.ServeFile(w, r, "public/styles.css")
+		http.ServeFile(w, r, "public/css/styles.css")
+	})
+	router.GET("/login.css", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		http.ServeFile(w, r, "public/css/login.css")
+	})
+	router.GET("/login", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		http.ServeFile(w, r, "public/login.html")
+	})
+	router.POST("/login", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		data, _ := io.ReadAll(r.Body)
+		log.Println(string(data))
+		// TODO create auth middleware
+		// email=?&password=?
+		// TODO make call to authenticate and return token
+		if func() bool { return true }() {
+			http.ServeFile(w, r, "public/index.html")
+		}
+		// var msg json.RawMessage
+		// if err := json.NewDecoder(r.Body).Decode(&msg); err != nil {
+		// 	log.Println("failed Decode:", err)
+		// 	return
+		// }
+		// log.Printf("%#v\n", msg)
 	})
 	router.GET("/ws", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		serveWs(hub, w, r)
@@ -60,11 +78,13 @@ func main() {
 		defer cancel()
 		srv.Shutdown(ctx)
 	}()
-	func() {
+	go func() {
 		if err := srv.ListenAndServe(); err != nil {
 			log.Println("ListenAndServe:", err)
 		}
 	}()
+	log.Println("started http server at", *addr)
 
 	<-interruptCh
+	log.Println("starting graceful shutdown")
 }

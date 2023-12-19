@@ -1,44 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Opendoor.chat</title>
-    <script src="https://unpkg.com/htmx.org@1.9.9" integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
-    <link rel="stylesheet" type="text/css" href="styles.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
-</head>
-<body>
-    <!-- TODO login page redirect -->
 
-    <!-- Nav -->
-    <nav>
-        <ul>
-        <li>
-            <h1>Opendoor.chat</h1>
-        </li>
-        </ul>
-    </nav>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+        <title>Opendoor.chat</title>
+        <script src="https://unpkg.com/htmx.org@1.9.9"
+            integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX"
+            crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+        <script src="https://unpkg.com/htmx.org/dist/ext/head-support.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css">
+        <link rel="stylesheet" href="styles.css">
+    </head>
 
-    <main hx-ext="ws" ws-connect="/ws">
-        <div id="chat">
-            <div id="chat_messages"></div>
-            <form id="chat_form" ws-send>
-                <!-- TODO can optimize by not requiring server call to add chat_message element for emitter -->
-                <input id="chat_input" name="chat_message" placeholder="Send a message">
-            </form>
-        </div>
-    </main>
+    <body hx-ext="header-support">
+        <!-- TODO login page redirect should be in controller -->
 
-    <script>
-        const form = document.getElementById('chat_form')
-        form.addEventListener('htmx:wsAfterSend', function (event) {
+        <!-- // authenticate bearer token
+		token := r.Header["Authorization"]
+		log.Println("token:", token)
+		if len(token) > 0 {
+
+		} else {
+			http.ServeFile(w, r, "public/login.html")
+			return
+		} -->
+
+
+        <!-- Nav -->
+        <nav>
+            <ul>
+                <li>
+                    <h1>Opendoor.chat</h1>
+                </li>
+            </ul>
+        </nav>
+
+        <main hx-ext="ws" ws-connect="/ws">
+            <div id="chat">
+                <div id="chat_messages"></div>
+                <form id="chat_form" ws-send>
+                    <!-- TODO can optimize by not requiring server call to add chat_message element for emitter -->
+                    <input id="chat_input" name="chat_message" placeholder="Send a message">
+                </form>
+            </div>
+        </main>
+
+        <script>
+            const form = document.getElementById('chat_form')
+            form.addEventListener('htmx:wsAfterSend', function (event) {
                 event.target.reset();
-        });
-        form.addEventListener('htmx:wsBeforeSend', function (event) {
-            if (/:\"\",/.test(event.detail.message)) {
-                event.preventDefault();
-            };
-        });
-    </script>
-</body>
+            });
+            form.addEventListener('htmx:wsBeforeSend', function (event) {
+                if (/:\"\",/.test(event.detail.message)) {
+                    event.preventDefault();
+                };
+            });
+        </script>
+    </body>
+
 </html>

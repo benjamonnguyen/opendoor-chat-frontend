@@ -115,7 +115,7 @@ func (c *Client) writePump() {
 				log.Println("failed to Unmarshall message:", string(message))
 				continue
 			}
-			devLogger.Printf("received message: %#v\n", incoming)
+			devLogger.Println("received message")
 
 			//
 			if val, ok := incoming["chat_message"]; ok {
@@ -145,7 +145,6 @@ func (c *Client) writePump() {
 
 // serveWs handles websocket requests from the peer.
 func serveWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
-	log.Println("/ws")
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)

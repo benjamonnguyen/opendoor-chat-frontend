@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+        <title>Opendoor.chat • Login</title>
+        <script src="https://unpkg.com/htmx.org@1.9.9"
+            integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX"
+            crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+        <script src="https://unpkg.com/htmx.org/dist/ext/head-support.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@next/css/pico.min.css" />
+        <link rel="stylesheet" href="login.css" />
+    </head>
+
+    <body>
+        <header></header>
+        <main>
+            <!-- <nav class="container-fluid">
+                <ul>
+                    <li>
+                        <a href="/" class="contrast" style="text-decoration: none;">
+                            <h4>Opendoor.chat</h4>
+                        </a>
+                    </li>
+                </ul>
+            </nav> -->
+            <div class="grid">
+                <div id="flavor-text">
+                    <section></section>
+                    <h1><kbd>Opendoor.chat</kbd></h1>
+                    <blockquote>
+                        "Believe me, there’s no honor among thieves…
+                        except us of course."
+                        <footer>
+                            <cite>- Saul Goodman</cite>
+                        </footer>
+                    </blockquote>
+                </div>
+                <article>
+                    <h4>Sign in</h4>
+                    <form hx-post="/login" hx-replace-url="true">
+                        <input type="email" name="email" placeholder="Email" aria-label="email" required />
+                        <input type="password" name="password" placeholder="Password" aria-label="password"
+                            autocomplete="current-password" required />
+                        <fieldset>
+                            <label for="remember">
+                                <input type="checkbox" role="switch" id="remember" name="remember" />
+                                Remember me
+                            </label>
+                        </fieldset>
+                        <button type="submit" class="contrast">Login</button>
+                    </form>
+                </article>
+            </div>
+        </main>
+    </body>
