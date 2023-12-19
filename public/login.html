@@ -13,32 +13,20 @@
         <link rel="stylesheet" href="login.css" />
     </head>
 
-    <body>
-        <header></header>
+    <body class="container">
+        <nav>
+            <ul>
+                <li>
+                    <a class="contrast">
+                        <h2><kbd>Opendoor.chat</kbd></h2>
+                    </a>
+                </li>
+            </ul>
+        </nav>
         <main>
-            <!-- <nav class="container-fluid">
-                <ul>
-                    <li>
-                        <a href="/" class="contrast" style="text-decoration: none;">
-                            <h4>Opendoor.chat</h4>
-                        </a>
-                    </li>
-                </ul>
-            </nav> -->
-            <div class="grid">
-                <div>
-                    <section></section>
-                    <h1><kbd>Opendoor.chat</kbd></h1>
-                    <blockquote id="flavor-text">
-                        "Believe me, there’s no honor among thieves…
-                        except us of course."
-                        <footer>
-                            <cite>- Saul Goodman</cite>
-                        </footer>
-                    </blockquote>
-                </div>
-                <article>
-                    <h4>Sign in</h4>
+            <div class="grid" style="align-items: center;">
+                <article id="login-card">
+                    <h3>Log in</h3>
                     <form hx-post="/login" hx-replace-url="true">
                         <input type="email" name="email" placeholder="Email" aria-label="email" required />
                         <input type="password" name="password" placeholder="Password" aria-label="password"
@@ -49,9 +37,20 @@
                                 Remember me
                             </label>
                         </fieldset>
-                        <button type="submit" class="contrast">Login</button>
+                        <input type="submit" class="contrast" value="Continue" />
                     </form>
+                    <div id="signup-sm">
+                        <hr style="width: 75%;" />
+                        <small>New to Opendoor? <a href="/signup">Sign up</a></small>
+                    </div>
                 </article>
+                <section id="signup-lg" class="container-fluid">
+                    <hgroup>
+                        <h2>New here?</h2>
+                        <p>Welcome to the Opendoor community!</p>
+                    </hgroup>
+                    <a id="signup-btn" role="button" class="secondary" href="/signup">Sign up</a>
+                </section>
             </div>
         </main>
     </body>

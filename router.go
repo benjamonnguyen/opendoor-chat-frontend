@@ -17,20 +17,25 @@ var upgrader = websocket.Upgrader{
 }
 
 func buildServer(addr string, hub *chat.Hub) *http.Server {
-	//
+	// Pages
 	router := httprouter.New()
 	router.GET("/", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		http.ServeFile(w, r, "public/index.html")
 	})
+	router.GET("/login", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		http.ServeFile(w, r, "public/login.html")
+	})
+	router.GET("/signup", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		http.ServeFile(w, r, "public/signup.html")
+	})
+	// CSS
 	router.GET("/styles.css", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		http.ServeFile(w, r, "public/css/styles.css")
 	})
 	router.GET("/login.css", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		http.ServeFile(w, r, "public/css/login.css")
 	})
-	router.GET("/login", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		http.ServeFile(w, r, "public/login.html")
-	})
+	//
 	router.POST("/login", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		data, _ := io.ReadAll(r.Body)
 		log.Println(string(data))

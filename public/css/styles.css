@@ -1,33 +1,20 @@
-html,
+/* html,
 body,
 main {
   height: 100%;
   position: fixed;
   overflow: hidden;
-}
-
-html>body>main {
-  padding: 0 2.5em;
-}
-
-nav {
-  padding: 0 2.5em;
-  background-color: var(--background-color);
-}
-
-li>h1 {
-  margin-bottom: 2.5em;
-}
+} */
 
 #chat {
   justify-content: space-between;
   display: flex;
   flex-direction: column;
   height: 80%;
+  width: 100%;
 
   position: fixed;
   bottom: 0px;
-  width: 80%;
 }
 
 #chat_messages {
@@ -38,9 +25,16 @@ li>h1 {
 }
 
 #chat_form {
-  padding: 1em 5em;
+  padding: 2em 2em 1em;
 }
 
 .chat_message {
-  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
+  width: max-content;
+}
+
+@media only screen and (min-width: 500px) {
+  #chat_form {
+    padding: 2em 4em 1em;
+  }
 }

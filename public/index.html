@@ -9,39 +9,27 @@
             crossorigin="anonymous"></script>
         <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
         <script src="https://unpkg.com/htmx.org/dist/ext/head-support.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@next/css/pico.min.css" />
         <link rel="stylesheet" href="styles.css">
     </head>
 
-    <body hx-ext="header-support">
-        <!-- TODO login page redirect should be in controller -->
-
-        <!-- // authenticate bearer token
-		token := r.Header["Authorization"]
-		log.Println("token:", token)
-		if len(token) > 0 {
-
-		} else {
-			http.ServeFile(w, r, "public/login.html")
-			return
-		} -->
-
-
-        <!-- Nav -->
+    <body hx-ext="header-support" class="container">
         <nav>
             <ul>
                 <li>
-                    <h1>Opendoor.chat</h1>
+                    <a class="contrast">
+                        <h2><kbd>Opendoor.chat</kbd></h2>
+                    </a>
                 </li>
             </ul>
         </nav>
 
         <main hx-ext="ws" ws-connect="/ws">
-            <div id="chat">
+            <div id="chat" class="container">
                 <div id="chat_messages"></div>
                 <form id="chat_form" ws-send>
                     <!-- TODO can optimize by not requiring server call to add chat_message element for emitter -->
-                    <input id="chat_input" name="chat_message" placeholder="Send a message">
+                    <input id="chat_input" name="chat_message" placeholder="Send a message...">
                 </form>
             </div>
         </main>
