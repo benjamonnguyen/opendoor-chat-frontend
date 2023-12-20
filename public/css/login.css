@@ -6,6 +6,12 @@
     margin-bottom: 0;
 }
 
+#login-alt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 #signup-sm {
     display: flex;
     flex-direction: column;

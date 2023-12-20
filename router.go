@@ -17,31 +17,39 @@ var upgrader = websocket.Upgrader{
 }
 
 func buildServer(addr string, hub *chat.Hub) *http.Server {
-	// Pages
+	// App pages
 	router := httprouter.New()
-	router.GET("/", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	router.GET("/app", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		http.ServeFile(w, r, "public/index.html")
 	})
-	router.GET("/login", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	router.GET("/app/login", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		http.ServeFile(w, r, "public/login.html")
 	})
-	router.GET("/signup", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	router.GET("/app/signup", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		http.ServeFile(w, r, "public/signup.html")
 	})
+	// TODO /app/demo get demo data to populate UI and allow user to click around, but don't allow mutation
+
 	// CSS
-	router.GET("/styles.css", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		http.ServeFile(w, r, "public/css/styles.css")
-	})
-	router.GET("/login.css", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	router.GET(
+		"/css/styles.css",
+		func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+			http.ServeFile(w, r, "public/css/styles.css")
+		},
+	)
+	router.GET("/css/login.css", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		http.ServeFile(w, r, "public/css/login.css")
 	})
-	//
-	router.POST("/login", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+
+	// API
+	router.POST("/api/login", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		data, _ := io.ReadAll(r.Body)
 		log.Println(string(data))
 		// TODO create auth middleware
 		// email=?&password=?
 		// TODO make call to authenticate and return token
+		// salt and hash (sha256)
+		// validate length and strength for signup
 		if func() bool { return true }() {
 			http.ServeFile(w, r, "public/index.html")
 		}
@@ -52,6 +60,9 @@ func buildServer(addr string, hub *chat.Hub) *http.Server {
 		// }
 		// log.Printf("%#v\n", msg)
 	})
+	// router.POST("/api/sign")
+
+	// WS
 	router.GET("/ws", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		serveWs(hub, w, r)
 	})
@@ -74,4 +85,10 @@ func serveWs(hub *chat.Hub, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	hub.Register(chat.NewClient(hub, conn))
+}
+
+func auth() {
+	// check for auth bear token
+	// make call to auth-svc
+	// handle resp
 }

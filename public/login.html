@@ -10,10 +10,11 @@
         <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
         <script src="https://unpkg.com/htmx.org/dist/ext/head-support.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@next/css/pico.min.css" />
-        <link rel="stylesheet" href="login.css" />
+        <link rel="stylesheet" href="/css/login.css" />
     </head>
 
     <body class="container">
+        <!-- TODO templ navbar component -->
         <nav>
             <ul>
                 <li>
@@ -27,7 +28,7 @@
             <div class="grid" style="align-items: center;">
                 <article id="login-card">
                     <h3>Log in</h3>
-                    <form hx-post="/login" hx-replace-url="true">
+                    <form hx-post="/api/login" hx-replace-url="true">
                         <input type="email" name="email" placeholder="Email" aria-label="email" required />
                         <input type="password" name="password" placeholder="Password" aria-label="password"
                             autocomplete="current-password" required />
@@ -39,9 +40,9 @@
                         </fieldset>
                         <input type="submit" class="contrast" value="Continue" />
                     </form>
-                    <div id="signup-sm">
+                    <div id="signup-sm" class="container">
                         <hr style="width: 75%;" />
-                        <small>New to Opendoor? <a href="/signup">Sign up</a></small>
+                        <small>New to Opendoor? <a href="/app/signup">Sign up</a></small>
                     </div>
                 </article>
                 <section id="signup-lg" class="container-fluid">
@@ -49,7 +50,7 @@
                         <h2>New here?</h2>
                         <p>Welcome to the Opendoor community!</p>
                     </hgroup>
-                    <a id="signup-btn" role="button" class="secondary" href="/signup">Sign up</a>
+                    <a id="signup-btn" role="button" class="secondary" href="/app/signup">Sign up</a>
                 </section>
             </div>
         </main>

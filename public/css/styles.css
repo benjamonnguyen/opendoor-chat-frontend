@@ -19,7 +19,8 @@ main {
 
 #chat_messages {
   height: 100%;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: auto;
   display: flex;
   flex-direction: column-reverse;
 }

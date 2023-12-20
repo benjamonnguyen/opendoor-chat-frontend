@@ -10,7 +10,7 @@
         <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
         <script src="https://unpkg.com/htmx.org/dist/ext/head-support.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@next/css/pico.min.css" />
-        <link rel="stylesheet" href="login.css" />
+        <link rel="stylesheet" href="/css/login.css" />
     </head>
 
     <body class="container">
@@ -31,10 +31,19 @@
                 <article id="login-card">
                     <h3>Sign up</h3>
                     <form hx-post="/signup" hx-replace-url="true">
+                        <div class="grid">
+                            <input type="text" name="firstname" placeholder="First Name" aria-label="firstname"
+                                required />
+                            <input type="text" name="lastname" placeholder="Last Name" aria-label="lastname" required />
+                        </div>
                         <input type="email" name="email" placeholder="Email" aria-label="email" required />
                         <input type="password" name="password" placeholder="Password" aria-label="password" required />
                         <input type="submit" class="contrast" value="Continue" />
                     </form>
+                    <div id="login-alt">
+                        <hr style="width: 75%;" />
+                        <small>Already have an account? <a href="/app/login">Log in</a></small>
+                    </div>
                 </article>
             </div>
         </main>
