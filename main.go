@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/benjamonnguyen/opendoor-chat-frontend/chat"
+	"github.com/benjamonnguyen/opendoor-chat-frontend/config"
 	"github.com/benjamonnguyen/opendoor-chat-frontend/devlog"
 )
 
@@ -27,11 +28,14 @@ func main() {
 	signal.Notify(interruptCh, os.Interrupt)
 
 	//
+	cfg := config.LoadConfig(".env")
+
+	//
 	hub := chat.NewHub()
 	go hub.Run()
 
 	//
-	srv := buildServer(*addr, hub)
+	srv := buildServer(cfg, *addr, hub)
 	defer func() {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
