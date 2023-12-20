@@ -28,7 +28,10 @@ func main() {
 	signal.Notify(interruptCh, os.Interrupt)
 
 	//
-	cfg := config.LoadConfig(".env")
+	cfg, err := config.LoadConfig(".env")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	//
 	hub := chat.NewHub()

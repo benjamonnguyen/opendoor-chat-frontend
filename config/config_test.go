@@ -11,7 +11,7 @@ func TestLoadConfig(t *testing.T) {
 	const wantSalt = "salt"
 	const wantBackendBaseUrl = "http://localhost:8080"
 
-	cfg := config.LoadConfig("test.env")
+	cfg, _ := config.LoadConfig("test.env")
 	if cfg.Salt != wantSalt {
 		t.Errorf("cfg.Salt: got %s, want %s\n", cfg.Salt, wantSalt)
 	}

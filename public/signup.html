@@ -14,8 +14,8 @@
     </head>
 
     <body class="container">
-        <section></section>
         <main>
+            <div id="modal"></div>
             <div class="grid" style="align-items: center;">
                 <div>
                     <section></section>
@@ -30,13 +30,15 @@
                 </div>
                 <article id="login-card">
                     <h3>Sign up</h3>
-                    <form hx-post="/signup" hx-replace-url="true">
+                    <form hx-post="/api/signup" hx-target="#modal">
                         <div class="grid">
-                            <input type="text" name="firstname" placeholder="First Name" aria-label="firstname"
+                            <input type="text" name="first-name" placeholder="First Name" aria-label="first-name"
                                 required />
-                            <input type="text" name="lastname" placeholder="Last Name" aria-label="lastname" required />
+                            <input type="text" name="last-name" placeholder="Last Name" aria-label="last-name"
+                                required />
                         </div>
                         <input type="email" name="email" placeholder="Email" aria-label="email" required />
+                        <!-- TODO client-side pw validation -->
                         <input type="password" name="password" placeholder="Password" aria-label="password" required />
                         <input type="submit" class="contrast" value="Continue" />
                     </form>
