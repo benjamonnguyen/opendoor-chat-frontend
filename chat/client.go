@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/benjamonnguyen/opendoor-chat-frontend/devlog"
+	"github.com/benjamonnguyen/gootils/devlog"
 	"github.com/benjamonnguyen/opendoor-chat-frontend/templates"
 	"github.com/gorilla/websocket"
 )

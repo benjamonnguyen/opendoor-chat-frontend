@@ -1,6 +1,6 @@
 module github.com/benjamonnguyen/opendoor-chat-frontend
 
-go 1.21.1
+go 1.21.4
 
 require (
 	github.com/gorilla/websocket v1.5.1
@@ -10,6 +10,7 @@ require (
 )
 
 require (
+	github.com/benjamonnguyen/gootils v0.2.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect

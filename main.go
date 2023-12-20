@@ -4,20 +4,18 @@ import (
 	"context"
 	"flag"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"time"
 
+	"github.com/benjamonnguyen/gootils/devlog"
 	"github.com/benjamonnguyen/opendoor-chat-frontend/chat"
 	"github.com/benjamonnguyen/opendoor-chat-frontend/config"
-	"github.com/benjamonnguyen/opendoor-chat-frontend/devlog"
-)
-
-var (
-	addr = flag.String("addr", ":3000", "http service address")
 )
 
 func main() {
+	addr := flag.String("addr", ":3000", "http service address")
 	flag.Parse()
 	devlog.Enable(true)
 
@@ -27,18 +25,21 @@ func main() {
 	interruptCh := make(chan os.Signal, 1)
 	signal.Notify(interruptCh, os.Interrupt)
 
-	//
+	// config
 	cfg, err := config.LoadConfig(".env")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	//
+	// ws
 	hub := chat.NewHub()
 	go hub.Run()
 
-	//
-	srv := buildServer(cfg, *addr, hub)
+	// server
+	cl := &http.Client{
+		Timeout: time.Minute,
+	}
+	srv := buildServer(cfg, *addr, hub, cl)
 	defer func() {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
