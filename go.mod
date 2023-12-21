@@ -3,14 +3,15 @@ module github.com/benjamonnguyen/opendoor-chat-frontend
 go 1.21.4
 
 require (
+	github.com/benjamonnguyen/gootils v0.4.0
 	github.com/gorilla/websocket v1.5.1
 	github.com/julienschmidt/httprouter v1.3.0
+	github.com/rs/zerolog v1.31.0
 	github.com/spf13/viper v1.18.2
 	github.com/urfave/negroni v1.0.0
 )
 
 require (
-	github.com/benjamonnguyen/gootils v0.3.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
@@ -18,7 +19,6 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
-	github.com/rs/zerolog v1.31.0 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect

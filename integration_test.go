@@ -18,7 +18,7 @@ func TestCreateUserIT(t *testing.T) {
 	params := map[string]string{
 		"firstName": "Jesse",
 		"lastName":  "Pinkman",
-		"password":  "scienceB*tch!",
+		"password":  "scienceB1tch!",
 		"email":     "captaincook@bb.com",
 	}
 

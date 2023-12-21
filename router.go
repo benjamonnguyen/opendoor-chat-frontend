@@ -47,6 +47,7 @@ func buildServer(cfg config.Config, addr string, hub *chat.Hub, cl *http.Client)
 
 	// API
 	gateway := gateway.NewApiGateway(cl, cfg)
+	// TODO router.GET("/api/user") to check bearer token and fetch user data else redirect to login
 	router.POST("/api/login", gateway.LogIn)
 	router.POST("/api/signup", gateway.SignUp)
 

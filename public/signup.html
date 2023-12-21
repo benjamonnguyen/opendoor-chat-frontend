@@ -33,9 +33,9 @@
                         onsubmit="signUp(this, event);" hx-on::after-request="enable(this);">
                         <div class="grid">
                             <input type="text" name="first-name" placeholder="First Name" aria-label="first-name"
-                                required />
+                                maxlength="64" oninput="this.setCustomValidity('')" required />
                             <input type="text" name="last-name" placeholder="Last Name" aria-label="last-name"
-                                required />
+                                maxlength="64" oninput="this.setCustomValidity('')" required />
                         </div>
                         <input type="email" name="email" placeholder="Email" aria-label="email" required />
                         <input type="password" name="password" placeholder="Password" aria-label="password"
@@ -52,23 +52,38 @@
         </main>
 
         <script>
-            async function validatePassword(el, event) {
+            async function validateInputs(el, event) {
+                const nameRegex = /[a-zA-ZÀ-ÖØ-öø-ÿ]+/;
+                const invalidNameMsg = 'Can only contain letters.';
+                const firstName = el.querySelector('[name="first-name"]');
+                if (!nameRegex.test(firstName.value)) {
+                    firstName.setCustomValidity(invalidNameMsg);
+                    firstName.reportValidity();
+                    return false;
+                }
+                const lastName = el.querySelector('[name="last-name"]');
+                if (!nameRegex.test(lastName.value)) {
+                    lastName.setCustomValidity(invalidNameMsg);
+                    lastName.reportValidity();
+                    return false;
+                }
+
+                const pwRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[~`!@#$%^&*()_\-+={[}\]|:;"'<,>.?/]).+$/;
                 const pw = el.querySelector('[name="password"]');
-                const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[~`!@#$%^&*()_\-+={[}\]|:;"'<,>.?/]).+$/;
-                if (!regex.test(pw.value)) {
+                if (!pwRegex.test(pw.value)) {
                     pw.setCustomValidity(`Requirements:
                             Must contain an uppercase letter: A-Z.
                             Must contain a lowercase letter: a-z.
                             Must contain a number: 0-9.
                             Must contain a symbol: ~\`! @#$%^&*()_-+={[}]|\:;"'<,>.?/`);
                     pw.reportValidity();
-                    event.preventDefault();
                     return false;
                 }
                 return true;
             }
             const signUp = async (el, event) => {
-                if (!await validatePassword(el, event)) {
+                if (!await validateInputs(el, event)) {
+                    event.preventDefault();
                     return;
                 }
 

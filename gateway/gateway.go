@@ -8,7 +8,6 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/benjamonnguyen/gootils/httputil"
 	"github.com/benjamonnguyen/opendoor-chat-frontend/config"
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/zerolog/log"
@@ -90,15 +89,18 @@ func (a *ApiGateway) LogIn(w http.ResponseWriter, r *http.Request, p httprouter.
 			return
 		}
 		http.SetCookie(w, &http.Cookie{
-			Name:    "Authorization",
+			Name:    "OPENDOOR_CHAT_TOKEN", // TODO obfuscate bearer token key
 			Value:   string(token),
+			Path:    "/",
 			Expires: time.Now().Add(24 * time.Hour * 60),
 		})
 		w.Header().Set("HX-Redirect", "/app")
-	} else if httputil.Is4xx(resp.StatusCode) {
+		w.WriteHeader(200)
+	} else if resp.StatusCode == http.StatusUnauthorized {
 		w.Write([]byte(`<div id="login-status"><small id="login-status-text" style="color: #FF6161;">
 		The email and/or password you entered are not correct.</small></div>`))
 	} else {
+		log.Error().Str("route", "POST /api/login").Msg(resp.Status)
 		w.Write([]byte(`<div id="login-status"> <small id="login-status-text" style="color: #FF6161;">
 		Something went wrong. Please wait a moment and try again.</small></div>`))
 	}
@@ -166,11 +168,12 @@ func (a *ApiGateway) SignUp(w http.ResponseWriter, r *http.Request, p httprouter
 		You're registered! Please verify your email.</small></div>`
 	} else if resp.StatusCode == http.StatusConflict {
 		html = `<div id="login-status"><small id="login-status-text" style="color: #FF6161;">
-		This email is already in use. <a href="/app/login>Log in?</a></small></div>`
+		This email is already in use.</small></div>`
 	} else {
 		log.Error().Str("route", "POST /api/signup").Msg(resp.Status)
 		html = `<div id="login-status"><small id="login-status-text" style="color: #FF6161;">
 		Something went wrong. Please wait a moment and try again.</small></div>`
+		// TODO if problem persists, contact ???
 	}
 	w.Write([]byte(html))
 	// TODO verification email

@@ -17,7 +17,7 @@ import (
 func main() {
 	addr := flag.String("addr", ":3000", "http service address")
 	flag.Parse()
-	devlog.Enable(true)
+	devlog.Init(true, nil)
 
 	// graceful shutdown
 	// ctx, cancel := context.WithCancel(context.Background())
