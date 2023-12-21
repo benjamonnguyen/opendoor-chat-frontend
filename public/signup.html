@@ -15,7 +15,6 @@
 
     <body class="container">
         <main>
-            <div id="modal"></div>
             <div class="grid" style="align-items: center;">
                 <div>
                     <section></section>
@@ -30,7 +29,8 @@
                 </div>
                 <article id="login-card">
                     <h3>Sign up</h3>
-                    <form hx-post="/api/signup" hx-target="#modal">
+                    <form hx-post="/api/signup" hx-target="#login-status" hx-swap="outerHTML"
+                        onsubmit="signUp(this, event);" hx-on::after-request="enable(this);">
                         <div class="grid">
                             <input type="text" name="first-name" placeholder="First Name" aria-label="first-name"
                                 required />
@@ -38,15 +38,50 @@
                                 required />
                         </div>
                         <input type="email" name="email" placeholder="Email" aria-label="email" required />
-                        <!-- TODO client-side pw validation -->
-                        <input type="password" name="password" placeholder="Password" aria-label="password" required />
+                        <input type="password" name="password" placeholder="Password" aria-label="password"
+                            oninput="this.setCustomValidity('')" minlength="8" maxlength="64" required />
                         <input type="submit" class="contrast" value="Continue" />
                     </form>
-                    <div id="login-alt">
+                    <div class="center-col" style="width: 100%;">
+                        <div id="login-status"><small id="login-status-text"></small></div>
                         <hr style="width: 75%;" />
                         <small>Already have an account? <a href="/app/login">Log in</a></small>
                     </div>
                 </article>
             </div>
         </main>
+
+        <script>
+            async function validatePassword(el, event) {
+                const pw = el.querySelector('[name="password"]');
+                const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[~`!@#$%^&*()_\-+={[}\]|:;"'<,>.?/]).+$/;
+                if (!regex.test(pw.value)) {
+                    pw.setCustomValidity(`Requirements:
+                            Must contain an uppercase letter: A-Z.
+                            Must contain a lowercase letter: a-z.
+                            Must contain a number: 0-9.
+                            Must contain a symbol: ~\`! @#$%^&*()_-+={[}]|\:;"'<,>.?/`);
+                    pw.reportValidity();
+                    event.preventDefault();
+                    return false;
+                }
+                return true;
+            }
+            const signUp = async (el, event) => {
+                if (!await validatePassword(el, event)) {
+                    return;
+                }
+
+                const status = document.getElementById('login-status')
+                status.setAttribute('aria-busy', true);
+                const text = document.getElementById('login-status-text')
+                text.textContent = 'Creating account...';
+                text.style = '';
+
+                el.querySelector('input[type="submit"]').setAttribute('disabled', '');
+            }
+            function enable(el) {
+                el.querySelector('input[type="submit"]').removeAttribute('disabled');
+            }
+        </script>
     </body>

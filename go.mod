@@ -10,7 +10,7 @@ require (
 )
 
 require (
-	github.com/benjamonnguyen/gootils v0.2.0 // indirect
+	github.com/benjamonnguyen/gootils v0.3.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
