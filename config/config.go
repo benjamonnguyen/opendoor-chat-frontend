@@ -5,7 +5,7 @@ import (
 )
 
 type Config struct {
-	Salt           string
+	BackendApiKey  string `mapstructure:"backend_api_key"`
 	BackendBaseUrl string `mapstructure:"backend_base_url"`
 }
 

@@ -3,7 +3,7 @@ module github.com/benjamonnguyen/opendoor-chat-frontend
 go 1.21.4
 
 require (
-	github.com/benjamonnguyen/gootils v0.4.0
+	github.com/benjamonnguyen/gootils v0.5.0
 	github.com/gorilla/websocket v1.5.1
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/rs/zerolog v1.31.0

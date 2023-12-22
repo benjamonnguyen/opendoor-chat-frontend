@@ -86,7 +86,7 @@ func (c *Client) readPump() {
 			break
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-		devlog.Println("sending message:", string(message))
+		devlog.Print("sending message:", string(message))
 		c.hub.broadcast <- message
 	}
 }
@@ -123,7 +123,7 @@ func (c *Client) writePump() {
 				log.Println("failed to Unmarshall message:", string(message))
 				continue
 			}
-			devlog.Println("received message")
+			devlog.Print("received message")
 
 			//
 			if val, ok := incoming["chat_message"]; ok {

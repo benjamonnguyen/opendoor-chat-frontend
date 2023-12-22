@@ -1,5 +1,7 @@
 github.com/benjamonnguyen/gootils v0.4.0 h1:odxJTzzD6DaYNYTEWOxO+q2khQtD3L6/rADyUIQfylc=
 github.com/benjamonnguyen/gootils v0.4.0/go.mod h1:TQRTCMEyqgUgNCrZeVDa5nXjduYWOU/MDYXHyDVi1fk=
+github.com/benjamonnguyen/gootils v0.5.0 h1:grzxI1Lwbx4AsjE61eeCPHfiAjzd1Y15HMryB+3kYwY=
+github.com/benjamonnguyen/gootils v0.5.0/go.mod h1:TQRTCMEyqgUgNCrZeVDa5nXjduYWOU/MDYXHyDVi1fk=
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

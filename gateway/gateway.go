@@ -67,6 +67,7 @@ func (a *ApiGateway) LogIn(w http.ResponseWriter, r *http.Request, p httprouter.
 		http.Error(w, "", 500)
 		return
 	}
+	r.Header.Set("Authorization", a.cfg.BackendApiKey)
 	resp, err := a.cl.Do(req)
 	if err != nil {
 		log.Error().
@@ -150,6 +151,7 @@ func (a *ApiGateway) SignUp(w http.ResponseWriter, r *http.Request, p httprouter
 		http.Error(w, "", 500)
 		return
 	}
+	r.Header.Set("Authorization", a.cfg.BackendApiKey)
 	resp, err := a.cl.Do(req)
 	if err != nil {
 		log.Error().

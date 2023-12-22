@@ -8,12 +8,12 @@ import (
 
 func TestLoadConfig(t *testing.T) {
 	// want
-	const wantSalt = "salt"
+	const wantBackendApiKey = "backendApiKey"
 	const wantBackendBaseUrl = "http://localhost:8080"
 
 	cfg, _ := config.LoadConfig("test.env")
-	if cfg.Salt != wantSalt {
-		t.Errorf("cfg.Salt: got %s, want %s\n", cfg.Salt, wantSalt)
+	if cfg.BackendApiKey != wantBackendApiKey {
+		t.Errorf("cfg.Salt: got %s, want %s\n", cfg.BackendApiKey, wantBackendApiKey)
 	}
 	if cfg.BackendBaseUrl != wantBackendBaseUrl {
 		t.Errorf("cfg.BackendBaseUrl: got %s, want %s\n", cfg.BackendBaseUrl, wantBackendBaseUrl)
