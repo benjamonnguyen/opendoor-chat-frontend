@@ -67,7 +67,8 @@ func (a *ApiGateway) LogIn(w http.ResponseWriter, r *http.Request, p httprouter.
 		http.Error(w, "", 500)
 		return
 	}
-	r.Header.Set("Authorization", a.cfg.BackendApiKey)
+	// TODO reCAPTCHA
+	// req.Header.Set("Authorization", a.cfg.BackendApiKey)
 	resp, err := a.cl.Do(req)
 	if err != nil {
 		log.Error().
@@ -90,14 +91,14 @@ func (a *ApiGateway) LogIn(w http.ResponseWriter, r *http.Request, p httprouter.
 			return
 		}
 		http.SetCookie(w, &http.Cookie{
-			Name:    "OPENDOOR_CHAT_TOKEN", // TODO obfuscate bearer token key
+			Name:    "OPENDOOR_CHAT_TOKEN", // TODO obfuscate bearer token key?
 			Value:   string(token),
 			Path:    "/",
 			Expires: time.Now().Add(24 * time.Hour * 60),
 		})
 		w.Header().Set("HX-Redirect", "/app")
 		w.WriteHeader(200)
-	} else if resp.StatusCode == http.StatusUnauthorized {
+	} else if resp.StatusCode == http.StatusUnauthorized && resp.Status != "invalid api key" {
 		w.Write([]byte(`<div id="login-status"><small id="login-status-text" style="color: #FF6161;">
 		The email and/or password you entered are not correct.</small></div>`))
 	} else {
@@ -151,7 +152,8 @@ func (a *ApiGateway) SignUp(w http.ResponseWriter, r *http.Request, p httprouter
 		http.Error(w, "", 500)
 		return
 	}
-	r.Header.Set("Authorization", a.cfg.BackendApiKey)
+	// TODO reCAPTCHA
+	// r.Header.Set("Authorization", a.cfg.BackendApiKey)
 	resp, err := a.cl.Do(req)
 	if err != nil {
 		log.Error().

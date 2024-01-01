@@ -7,3 +7,6 @@ dev:
 		-i 'styles.css' \
 		-o 'public/styles.css' \
 		--watch
+
+unittest:
+	go test -skip IT -cover -v ./...

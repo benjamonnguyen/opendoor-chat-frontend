@@ -5,7 +5,6 @@ import (
 )
 
 type Config struct {
-	BackendApiKey  string `mapstructure:"backend_api_key"`
 	BackendBaseUrl string `mapstructure:"backend_base_url"`
 }
 
