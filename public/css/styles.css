@@ -6,36 +6,16 @@ main {
   overflow: hidden;
 } */
 
-#chat {
-  justify-content: space-between;
-  display: flex;
-  flex-direction: column;
-  height: 80%;
-  width: 100%;
-
-  position: fixed;
-  bottom: 0px;
+.is-fixed-bottom {
+  z-index: 2;
+  position: sticky;
+  bottom: 0;
 }
 
-#chat_messages {
-  height: 100%;
-  overflow-y: scroll;
-  overflow-x: auto;
-  display: flex;
-  flex-direction: column-reverse;
+.interactive {
+  cursor: pointer;
 }
 
-#chat_form {
-  padding: 2em 2em 1em;
-}
-
-.chat_message {
-  margin-bottom: 0.5em;
-  width: max-content;
-}
-
-@media only screen and (min-width: 500px) {
-  #chat_form {
-    padding: 2em 4em 1em;
-  }
+.interactive:hover {
+  color: var(--pico-primary-hover);
 }

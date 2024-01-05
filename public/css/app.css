@@ -1,0 +1,81 @@
+html,
+body,
+main {
+    height: 100%;
+    overflow: unset;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+body>main {
+    height: 100%;
+    padding: 0;
+    flex-direction: row;
+}
+
+body>nav {
+    background-color: var(--pico-secondary-background);
+    height: 2em;
+    width: 100%;
+}
+
+#logotype {
+    padding-left: 1em;
+    color: var(--pico-primary-inverse);
+}
+
+#sidebar {
+    height: 100%;
+    width: 12em;
+    overflow-x: hidden;
+    background-color: var(--pico-muted-border-color);
+    padding: 1em;
+}
+
+#sidebar>ul {
+    padding: 0;
+}
+
+#sidebar li {
+    list-style: none;
+}
+
+#sidebar-header {
+    padding-bottom: 0.5em;
+    margin-bottom: 0.5em;
+    border-bottom: 1px solid;
+}
+
+#chat {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    padding: 1em 2em;
+}
+
+#chat-messages {
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 1em 0;
+}
+
+#chat-form {
+    max-width: 95%;
+    width: 85%;
+}
+
+#chat-header {
+    width: 100%;
+}
+
+.chat-message {
+    margin-bottom: 0.5em;
+    width: max-content;
+}

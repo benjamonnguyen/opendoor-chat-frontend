@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1" />
+        <title>Opendoor.chat</title>
+        <script src="https://unpkg.com/htmx.org@1.9.9"
+            integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX"
+            crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+        <script src="https://unpkg.com/htmx.org/dist/ext/head-support.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@next/css/pico.min.css" />
+        <link rel="stylesheet" href="/css/styles.css">
+        <link rel="stylesheet" href="/css/app.css">
+    </head>
+
+    <body hx-ext="header-support">
+        <nav>
+            <ul>
+                <li>
+                    <b id="logotype">
+                        Opendoor.chat
+                    </b>
+                </li>
+            </ul>
+        </nav>
+
+        <main hx-ext="ws" ws-connect="/ws">
+            <div id="sidebar" hx-get="TODO/api/user/chats/meta">
+                <ul>
+                    <li id="sidebar-header">
+                        <span class="interactive" id="new-chat-btn" hx-post="TODO/api/user/chat">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-edit">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </span>
+                    </li>
+                    <li hx-get="TODO/api/user/chat" hx-swap-oob="?">Chat</li>
+                    <li>Chat</li>
+                    <li>Chat</li>
+                    <li>Chat</li>
+                </ul>
+            </div>
+            <div id="chat">
+                <div id="chat-header">TODO "To: ..." or "Profile"</div>
+                <div id="chat-messages"></div>
+                <form id="chat-form" class="is-fixed-bottom" ws-send>
+                    <!-- TODO can optimize by not requiring server call to add chat_message element for emitter -->
+                    <input id="chat-input" name="chat-message" placeholder="Send a message...">
+                </form>
+            </div>
+        </main>
+
+        <script>
+            const form = document.getElementById('chat-form')
+            form.addEventListener('htmx:wsAfterSend', function (event) {
+                event.target.reset();
+            });
+            form.addEventListener('htmx:wsBeforeSend', function (event) {
+                if (/:\"\",/.test(event.detail.message)) {
+                    event.preventDefault();
+                };
+            });
+        </script>
+    </body>
+
+</html>

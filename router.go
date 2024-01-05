@@ -20,11 +20,15 @@ var (
 )
 
 func buildServer(cfg config.Config, addr string, hub *chat.Hub, cl *http.Client) *http.Server {
-	// App pages
 	router := httprouter.New()
+	//
+	router.GET("/", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		w.Write([]byte("Hello, World!"))
+	})
+	// App pages
 	router.GET("/app", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		// TODO authenticate
-		http.ServeFile(w, r, "public/index.html")
+		http.ServeFile(w, r, "public/app.html")
 	})
 	router.GET("/app/login", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		http.ServeFile(w, r, "public/login.html")
@@ -36,14 +40,11 @@ func buildServer(cfg config.Config, addr string, hub *chat.Hub, cl *http.Client)
 
 	// CSS
 	router.GET(
-		"/css/styles.css",
+		"/css/:file",
 		func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-			http.ServeFile(w, r, "public/css/styles.css")
+			http.ServeFile(w, r, "public/css/"+p.ByName("file"))
 		},
 	)
-	router.GET("/css/login.css", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		http.ServeFile(w, r, "public/css/login.css")
-	})
 
 	// API
 	gateway := gateway.NewApiGateway(cl, cfg)
@@ -55,6 +56,14 @@ func buildServer(cfg config.Config, addr string, hub *chat.Hub, cl *http.Client)
 	router.GET("/ws", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		serveWs(hub, w, r)
 	})
+
+	// Assets
+	router.GET(
+		"/assets/*filepath",
+		func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+			http.ServeFile(w, r, "public/"+p.ByName("filepath"))
+		},
+	)
 
 	//
 	n := negroni.Classic()

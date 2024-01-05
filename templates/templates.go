@@ -11,7 +11,7 @@ var (
 
 func init() {
 	t, err := template.New("chatMessage").
-		Parse(`<div id="chat_messages" hx-swap-oob="afterbegin"><div class="chat_message">{{.}}</div></div>`)
+		Parse(`<div id="chat-messages" hx-swap-oob="afterbegin"><div class="chat-message">{{.}}</div></div>`)
 	if err != nil {
 		log.Fatalln("failed parsing chatMessage template:", err)
 	}

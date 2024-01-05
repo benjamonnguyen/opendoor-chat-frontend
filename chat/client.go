@@ -126,7 +126,7 @@ func (c *Client) writePump() {
 			devlog.Print("received message")
 
 			//
-			if val, ok := incoming["chat_message"]; ok {
+			if val, ok := incoming["chat-message"]; ok {
 				msg := string(val)
 				msg = msg[1 : len(msg)-1] // remove quotes
 				if err := templates.ChatMessageTemplate.Execute(w, msg); err != nil {

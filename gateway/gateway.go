@@ -122,6 +122,7 @@ func (a *ApiGateway) SignUp(w http.ResponseWriter, r *http.Request, p httprouter
 		http.Error(w, "", 500)
 		return
 	}
+	// TODO client side validations must be re-done on the server side, as they can always be bypassed.
 
 	// create user
 	data, err = json.Marshal(map[string]string{

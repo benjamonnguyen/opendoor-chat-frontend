@@ -10,6 +10,5 @@
     - [ ] Search
     - [ ] Attachments
     - [ ] Logout link that cleans up cookies and redirects to Login page
-- [ ] Password recovery
 - [ ] Error pages (getPageForError(statusCode int))
 - [ ] Error notifications
