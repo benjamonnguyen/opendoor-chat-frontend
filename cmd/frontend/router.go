@@ -3,23 +3,27 @@ package main
 import (
 	"net/http"
 
-	"github.com/benjamonnguyen/opendoor-chat-frontend/chat"
+	app "github.com/benjamonnguyen/opendoor-chat-frontend"
 	"github.com/benjamonnguyen/opendoor-chat-frontend/config"
-	"github.com/benjamonnguyen/opendoor-chat-frontend/gateway"
+	"github.com/benjamonnguyen/opendoor-chat-frontend/ws"
 	"github.com/gorilla/websocket"
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/zerolog/log"
 	"github.com/urfave/negroni"
 )
 
-var (
-	upgrader = websocket.Upgrader{
+func buildServer(
+	cfg config.Config,
+	addr string,
+	hub *ws.Hub,
+	cl *http.Client,
+	chatSvc *app.ChatService,
+) *http.Server {
+	upgrader := websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 	}
-)
 
-func buildServer(cfg config.Config, addr string, hub *chat.Hub, cl *http.Client) *http.Server {
 	router := httprouter.New()
 	//
 	router.GET("/", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
@@ -27,7 +31,10 @@ func buildServer(cfg config.Config, addr string, hub *chat.Hub, cl *http.Client)
 	})
 	// App pages
 	router.GET("/app", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		// TODO authenticate
+		if !isAuthorized(r) {
+			http.Redirect(w, r, "/app/login", http.StatusFound)
+			return
+		}
 		http.ServeFile(w, r, "public/app.html")
 	})
 	router.GET("/app/login", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
@@ -38,6 +45,24 @@ func buildServer(cfg config.Config, addr string, hub *chat.Hub, cl *http.Client)
 	})
 	// TODO /app/demo get demo data to populate UI and allow user to click around, but don't allow mutation
 
+	// API Gateway interfaces with backend
+	gateway := app.NewApiGateway(cl, cfg)
+	router.POST("/api/login", gateway.LogIn)
+	router.POST("/api/signup", gateway.SignUp)
+
+	// Chat
+	router.GET("/chat/start-new-chat", chatSvc.StartNewChat)
+
+	// WS
+	router.GET("/ws", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+		conn, err := upgrader.Upgrade(w, r, nil)
+		if err != nil {
+			log.Error().Err(err).Msg("failed ws upgrade")
+			return
+		}
+		hub.Register(ws.NewClient(hub, conn))
+	})
+
 	// CSS
 	router.GET(
 		"/css/:file",
@@ -45,17 +70,6 @@ func buildServer(cfg config.Config, addr string, hub *chat.Hub, cl *http.Client)
 			http.ServeFile(w, r, "public/css/"+p.ByName("file"))
 		},
 	)
-
-	// API
-	gateway := gateway.NewApiGateway(cl, cfg)
-	// TODO router.GET("/api/user") to check bearer token and fetch user data else redirect to login
-	router.POST("/api/login", gateway.LogIn)
-	router.POST("/api/signup", gateway.SignUp)
-
-	// WS
-	router.GET("/ws", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		serveWs(hub, w, r)
-	})
 
 	// Assets
 	router.GET(
@@ -76,17 +90,11 @@ func buildServer(cfg config.Config, addr string, hub *chat.Hub, cl *http.Client)
 	}
 }
 
-func serveWs(hub *chat.Hub, w http.ResponseWriter, r *http.Request) {
-	conn, err := upgrader.Upgrade(w, r, nil)
+func isAuthorized(r *http.Request) bool {
+	c, err := r.Cookie("OPENDOOR_CHAT_TOKEN")
 	if err != nil {
-		log.Error().Err(err).Msg("failed ws upgrade")
-		return
+		return false
 	}
-	hub.Register(chat.NewClient(hub, conn))
-}
-
-func auth() {
-	// TODO check for auth bear token
-	// make call to auth-svc
-	// handle resp
+	// TODO isAuthorized impl
+	return c.Value != ""
 }

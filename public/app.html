@@ -29,7 +29,7 @@
             <div id="sidebar" hx-get="TODO/api/user/chats/meta">
                 <ul>
                     <li id="sidebar-header">
-                        <span class="interactive" id="new-chat-btn" hx-post="TODO/api/user/chat">
+                        <span class="interactive" id="new-chat-btn" hx-get="/api/new-chat" hx-trigger="click">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" class="feather feather-edit">

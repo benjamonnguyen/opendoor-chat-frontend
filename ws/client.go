@@ -1,4 +1,4 @@
-package chat
+package ws
 
 import (
 	"bytes"
@@ -6,7 +6,6 @@ import (
 	"log"
 	"time"
 
-	"github.com/benjamonnguyen/gootils/devlog"
 	"github.com/benjamonnguyen/opendoor-chat-frontend/templates"
 	"github.com/gorilla/websocket"
 )
@@ -86,7 +85,7 @@ func (c *Client) readPump() {
 			break
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-		devlog.Print("sending message:", string(message))
+		// devlog.Print("sending message:", string(message))
 		c.hub.broadcast <- message
 	}
 }
@@ -123,7 +122,7 @@ func (c *Client) writePump() {
 				log.Println("failed to Unmarshall message:", string(message))
 				continue
 			}
-			devlog.Print("received message")
+			// devlog.Print("received message")
 
 			//
 			if val, ok := incoming["chat-message"]; ok {

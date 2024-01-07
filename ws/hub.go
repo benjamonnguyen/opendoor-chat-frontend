@@ -1,4 +1,6 @@
-package chat
+package ws
+
+import "context"
 
 // Hub maintains the set of active clients and broadcasts messages to the
 // clients.
@@ -26,16 +28,17 @@ func NewHub() *Hub {
 	}
 }
 
-func (h *Hub) Run() {
+func (h *Hub) Run(ctx context.Context) {
 	for {
 		select {
-		case client := <-h.register:
-			h.clients[client] = true
-		case client := <-h.unregister:
-			if _, ok := h.clients[client]; ok {
-				delete(h.clients, client)
-				close(client.send)
+		case <-ctx.Done():
+			close(h.broadcast)
+			// TODO send remaining messages
+			for client := range h.clients {
+				// TODO will this correctly prevent reconnect attempts?
+				client.conn.Close()
 			}
+			return
 		case message := <-h.broadcast:
 			for client := range h.clients {
 				select {
@@ -44,6 +47,13 @@ func (h *Hub) Run() {
 					close(client.send)
 					delete(h.clients, client)
 				}
+			}
+		case client := <-h.register:
+			h.clients[client] = true
+		case client := <-h.unregister:
+			if _, ok := h.clients[client]; ok {
+				delete(h.clients, client)
+				close(client.send)
 			}
 		}
 	}

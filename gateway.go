@@ -1,4 +1,4 @@
-package gateway
+package app
 
 import (
 	"bytes"
@@ -91,7 +91,7 @@ func (a *ApiGateway) LogIn(w http.ResponseWriter, r *http.Request, p httprouter.
 			return
 		}
 		http.SetCookie(w, &http.Cookie{
-			Name:    "OPENDOOR_CHAT_TOKEN", // TODO obfuscate bearer token key?
+			Name:    "OPENDOOR_CHAT_TOKEN",
 			Value:   string(token),
 			Path:    "/",
 			Expires: time.Now().Add(24 * time.Hour * 60),
